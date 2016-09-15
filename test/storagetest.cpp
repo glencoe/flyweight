@@ -44,6 +44,35 @@ namespace {
     ASSERT_EQ(ptr1, ptr2);
   }
 
+  TEST(StorageTest, CreateAnAwfullLotDifferingItems)
+  {
+    flyweight::Storage<std::string> st;
+    auto shared_ptr_container = new std::vector<std::shared_ptr<const std::string>>();
+    std::string text = "";
+    for(int i = 0; i<1000000; i++)
+      {
+        shared_ptr_container->push_back(st.find(std::to_string(i)));
+      }
+    ASSERT_EQ(st.size(), 1000000);
+    delete shared_ptr_container;
+    ASSERT_TRUE(st.empty());
+  }
+
+  TEST(StorageTest, CreateAnAwfullLotEqualItems)
+  {
+    int count = 1000000;
+    flyweight::Storage<std::string> st;
+    auto shared_ptr_container = new std::vector<std::shared_ptr<const std::string>>();
+    for(int i=0; i<count; i++)
+      {
+        shared_ptr_container->push_back(st.find("item"));
+      }
+    ASSERT_EQ(st.size(), 1);
+    delete shared_ptr_container;
+    ASSERT_TRUE(st.empty());
+
+  }
+
 
 
 }  // namespace
