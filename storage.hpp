@@ -2,10 +2,8 @@
 #define STORAGE_HPP
 
 #include <unordered_map>
-#include <unordered_set>
 #include <memory>
 #include <type_traits>
-#include <iostream>
 
 namespace flyweight {
 
@@ -20,36 +18,22 @@ namespace flyweight {
     using size_type = std::size_t;
 
   public:
+
     return_type
-    add(const_type& element)
+    find(const_type& element)
     {
-      auto container_iterator = container.find(element);
-      if(container_iterator == std::end(container))
+      auto iter = container.find(element);
+      if(iter == container.end())
         {
-          std::cout << "Groesse:" << container.size() << std::endl;
-          auto result = container.insert(std::make_pair(element, value_type()));
-          auto iter = result.first;
-          const auto& key = std::get<0>(*iter);
-          std::cout << "Groesse:" << container.size() << std::endl;
-          auto shared = return_type(std::addressof(key), [this] (const T* ptr) {
-              this->remove(*ptr);
-            });
-          container[key] = shared;
-          return shared;
+          return this->add(element);
         }
-      return return_type(container[element]);
-    }
-
-    void
-    remove(const_type& element)
-    {
-      container.erase(element);
+      return return_type(iter->second);
     }
 
     return_type
-    get(value_type element)
+    get(const_type& element)
     {
-      return nullptr;
+      this->find(element);
     }
 
     size_type
@@ -64,14 +48,29 @@ namespace flyweight {
       return container.empty();
     }
 
+
   private:
-    container_type container;
+    return_type
+    add(const_type& element)
+    {
+      auto result = container.insert(std::make_pair(element, value_type()));
+      auto iter = result.first;
+      const auto& key = std::get<0>(*iter);
+      auto shared = return_type(std::addressof(key), [this] (const T* ptr) {
+          this->remove(ptr);
+        });
+      container[key] = shared;
+      return shared;
+    }
 
     void
     remove(const T* ptr)
     {
       container.erase(*ptr);
     }
+
+  private:
+    container_type container;
 
 
   };

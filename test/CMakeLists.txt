@@ -1,5 +1,7 @@
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS} ${Boos_INCLUDE_DIRS})
 add_executable(storagetest storagetest.cpp)
+add_executable(flyweighttest flyweighttest.cpp)
 target_link_libraries(storagetest libflyweight ${GTEST_BOTH_LIBRARIES})
-add_test(Test storagetest)
+target_link_libraries(flyweighttest libflyweight ${GTEST_BOTH_LIBRARIES})
+add_test(Test storagetest flyweighttest)

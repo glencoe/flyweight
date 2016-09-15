@@ -10,37 +10,38 @@ namespace {
     ASSERT_TRUE(st.empty());
   }
 
-  TEST(StorageTest, AddOneWithoutSharing)
+  TEST(StorageTest, FindOneWithoutSharing)
   {
     flyweight::Storage<std::string> st;
-    st.add("testing");
+    st.find("testing");
     ASSERT_TRUE(st.empty());
     ASSERT_EQ(st.size(), 0);
   }
 
-  TEST(StorageTest, AddOne)
+  TEST(StorageTest, FindOne)
   {
     flyweight::Storage<std::string> st;
-    auto ptr = st.add("testing");
+    auto ptr = st.find("testing");
     ASSERT_FALSE(st.empty());
     ASSERT_EQ(st.size(), 1);
   }
 
-  TEST(StorageTest, AddTwoDiffering)
+  TEST(StorageTest, FindTwoDiffering)
   {
     flyweight::Storage<std::string> st;
-    auto ptr1 = st.add("Testing");
-    auto ptr2 = st.add("tEstTTTTing");
+    auto ptr1 = st.find("Testing");
+    auto ptr2 = st.find("tEstTTTTing");
     ASSERT_FALSE(st.empty());
     ASSERT_EQ(st.size(), 2);
   }
 
-  TEST(StorageTest, AddTwoEqual)
+  TEST(StorageTest, FindTwoEqual)
   {
     flyweight::Storage<std::string> st;
-    auto ptr1 = st.add("Testing");
-    auto ptr2 = st.add("Testing");
-
+    auto ptr1 = st.find("Testing");
+    auto ptr2 = st.find("Testing");
+    ASSERT_EQ(st.size(), 1);
+    ASSERT_EQ(ptr1, ptr2);
   }
 
 
