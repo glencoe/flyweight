@@ -11,7 +11,9 @@ namespace flyweight {
 
   template <class T> using add_lref_t = typename std::add_lvalue_reference<T>::type;
   template <class T> using add_const_t = typename std::add_const<T>::type;
-  template <class T> using add_const_lref =  add_lref_t<add_const_t<T>>;
+  template <class T> using add_const_lref_t = add_lref_t<add_const_t<T>>;
+
+
 
   template<class T>
   class Storage
@@ -25,7 +27,7 @@ namespace flyweight {
   public:
 
     shared_element_ptr
-    find(add_const_t<key_type> element)
+    find(add_const_lref_t<key_type> element)
     {
       auto iter = container.find(element);
       if(iter == container.end())
@@ -36,7 +38,7 @@ namespace flyweight {
     }
 
     shared_element_ptr
-    get(add_const_t<key_type> element)
+    get(add_const_lref_t<key_type> element)
     {
       this->find(element);
     }
@@ -56,7 +58,7 @@ namespace flyweight {
 
   private:
     shared_element_ptr
-    add(add_const_t<key_type> element)
+    add(add_const_lref_t<key_type> element)
     {
       auto result = container.emplace(element, mapped_type());
       auto iter = result.first;
